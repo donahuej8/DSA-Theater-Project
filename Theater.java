@@ -2,6 +2,13 @@ package movieTheaterPackage;
 
 public class Theater {
 	
+	/*
+	 * NOTE: rows should be changed to an array (not all functions are needed)
+	 * Array size is already accounted for in "numRows"
+	 * 
+	 * CHANGE ALL LABGen's TO "Row [] rows"
+	 */
+	
 	private LABGen<Row> rows;
 	private int numSeatsPerRow;
 	private int numRows;
@@ -38,6 +45,15 @@ public class Theater {
 	}
 	
 	/**
+	 * Give the number of customers currently in this Theater
+	 * @return numInTheater
+	 */
+	public int getNumInTheater()
+	{
+		return numInTheater;
+	}
+	
+	/**
 	 * Whether or not the Theater has enough room for a given group
 	 * @param group
 	 * @return
@@ -63,10 +79,9 @@ public class Theater {
 	 * Seat all customers in a Group into their own seats
 	 * @param group
 	 * @throws FullTheaterException
-	 * @throws ListIndexOutOfBoundsException
 	 * @throws FullRowException
 	 */
-	public void seatGroup(Group group) throws FullTheaterException, ListIndexOutOfBoundsException, FullRowException
+	public void seatGroup(Group group) throws FullTheaterException, FullRowException
 	{
 		// if the theater is full, throw an exception
 		// else if the theater cannot hold enough customers, throw an exception
