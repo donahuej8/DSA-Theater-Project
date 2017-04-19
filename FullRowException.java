@@ -1,7 +1,7 @@
 package movieTheaterPackage;
 
 public class FullRowException 
-extends Exception
+extends IndexOutOfBoundsException
 {
 	public FullRowException(String s)
 	{

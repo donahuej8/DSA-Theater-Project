@@ -16,15 +16,20 @@ public class Driver {
 		QueueList<Group> Reg1 = new QueueList();
 		QueueList<Group> Reg2 = new QueueList();
 		QueueList<Group> Express = new QueueList();
+		
 		// Fields for Sales
 		int numTicketsSold = 0;	// total number of tickets sold
 		int totalEarnings = 0;	// total income from tickets sales
 		
-		// - - - - - - - - Retrieve General Information - - - - - - - - //
-		
+		// Fields for Theaters
 		int numRows = 0;	// number of Rows per Theater
 		int numSeats = 0;	// number of Seats per Row
 		
+		//////////////////////////////////////////////////////////////////
+		// - - - - - - - - Retrieve General Information - - - - - - - - //
+		//////////////////////////////////////////////////////////////////
+		
+		// - - - - - - - - Number of Rows - - - - - - - - //
 		boolean gettingRows = true;
 		while (gettingRows)
 		{
@@ -42,6 +47,7 @@ public class Driver {
 			}
 		}
 		
+		// - - - - - - - - Number of Seats per Row - - - - - - - - //		
 		boolean gettingSeats = true;
 		while (gettingSeats)
 		{
@@ -59,16 +65,19 @@ public class Driver {
 			}
 		}
 		
-		// Create two theaters
-		Theater lifeTheater = new Theater("Life", numRows, numSeats);
-		Theater loganTheater = new Theater("Logan", numRows, numSeats);
+		// Create Two Theater Objects (Logan and Life)
+		Theater lifeTheater = new Theater(numRows, numSeats);
+		Theater loganTheater = new Theater(numRows, numSeats);
+		// Notify User of Successful Theater Creation
 		System.out.println(); // space for visual appeal
 		System.out.println("Theaters Successfully Created.");
 		System.out.println("Rows per Theater: " + numRows);
 		System.out.println("Seats per Row: " + numSeats);
 		System.out.println(); // space for visual appeal
 		
-		// - - - - - - - -  - - Run Main Program - - - - - - - - - - //
+		////////////////////////////////////////////////////////////////
+		// - - - - - - - - - - Run Main Program - - - - - - - - - - - //
+		////////////////////////////////////////////////////////////////
 		
 		boolean reading = true;
 		while (reading)
@@ -103,20 +112,39 @@ public class Driver {
 					 * 2.) Ask for number of customers in group
 					 * 3.) Ask if any of the customers are <=11 in group Y/N
 					 * 4.) Place in proper ticket line
+					 * 		- add to number of customers in given ticket line
 					 */
 					break;
 				case "2":	// Customer Buys Ticket(s)
 					System.out.println("| - Customer Buys Ticket(s) - |");
+					/*
+					 * If it's the first time using this function,
+					 * 		- ask what line goes first
+					 * For each line
+					 * 		- ask what movie the first group wants to see
+					 * 		- check for room in that Theater
+					 * 		- if not enough room, give alternatives
+					 * 		- else, seat the group in the theater
+					 * 		- after actions are carried out, remove from ticket line
+					 */
 					break;
 				case "3":	// Customer(s) Leave(s) Theater
 					System.out.println("| - Customer(s) Leave(s) Theater - |");
 					/*
 					 * Ask which customer group is leaving
 					 * 		- Check both theaters for customers
-					 * Remove these customers from the theater they are in
+					 * 		- If not found, print error message
+					 * 		- else if found,
+					 * 			Remove these customers from the theater they are in
 					 */
 					break;
 				case "4":	// Display Info About Waiting Customers
+					/*
+					 * NOTE:
+					 * 		For displaying info about a line, how should we go about
+					 * 	displaying the info? Modify the toString method in the
+					 * 	QueueList class to neaten up the display?
+					 */
 					System.out.println("| - Display Info About Waiting Customers - |");
 					System.out.println("Regular Ticket Line 1:");
 					// display
@@ -136,12 +164,15 @@ public class Driver {
 					break;
 				case "7":	// Display Tickets Sold and Earnings
 					System.out.println("| - Display Tickets Sold and Total Earnings - |");
+					// Format these so that the first numbers line up nicely
+					System.out.println("Tickets Sold: " + numTicketsSold);
+					System.out.println("Total Earnings: " + totalEarnings);
 					break;
 				case "8":	// End Program
 					// Clear Both Theaters
 					lifeTheater.clearTheater();
 					loganTheater.clearTheater();
-					reading = false;
+					reading = false; // Stop "reading" input
 					System.out.println("| - - - Program Ended - - - |");
 					break;
 				default:	// Invalid Input
