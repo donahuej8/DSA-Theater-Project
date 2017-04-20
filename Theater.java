@@ -9,7 +9,9 @@ public class Theater {
 	 * CHANGE ALL LABGen's TO "Row [] rows"
 	 */
 	
+	//Read comment about LABgen in getSeatingChart method
 	private LABGen<Row> rows;
+	private String movieName;
 	private int numSeatsPerRow;
 	private int numRows;
 	private int numInTheater; // number of customers currently in Theater
@@ -20,8 +22,9 @@ public class Theater {
 	 * @param numRows
 	 * @param numSeatsPerRow
 	 */
-	public Theater(int numRows, int numSeatsPerRow)
+	public Theater(int numRows, int numSeatsPerRow, String movieName)
 	{
+		this.movieName = movieName;
 		this.numSeatsPerRow = numSeatsPerRow;
 		this.numRows = numRows;
 		rows = new LABGen<>(numRows); // LABGen should take in the number of rows
@@ -33,6 +36,15 @@ public class Theater {
 		}
 		MAX_NUM_CUSTOMERS = numRows * numSeatsPerRow;
 		numInTheater = 0;
+	}
+	
+	/**
+	 * Give the name of the movie in this theater
+	 * @return movieName
+	 */
+	public String getMovieName()
+	{
+		return movieName;
 	}
 	
 	/**
@@ -139,6 +151,7 @@ public class Theater {
 	public String getSeatingChart()
 	{
 		String layout = "";
+		//Maybe we should make the theater have a [][] of Group type, that way we can keep track of row and seat numbers
 		return layout;
 	}
 	
