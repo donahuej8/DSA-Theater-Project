@@ -19,7 +19,7 @@ public class Row {
 	 * Whether or not the row is full
 	 * @return
 	 */
-	boolean isFull()
+	public boolean isFull()
 	{
 		return (numFilledSeats == seats.length);
 	}
@@ -28,9 +28,18 @@ public class Row {
 	 * Whether or not the row is empty
 	 * @return
 	 */
-	boolean isEmpty()
+	public boolean isEmpty()
 	{
 		return (numFilledSeats == 0);
+	}
+	
+	/**
+	 * Give the number of filled seats in the row
+	 * @return
+	 */
+	public int getNumFilledSeats()
+	{
+		return numFilledSeats;
 	}
 	
 	/**
@@ -41,13 +50,14 @@ public class Row {
 	 */
 	public void seatCustomer(Group groupName, int index) throws FullRowException
 	{
-		if (numFilledSeats < seats.length)
+		if (numFilledSeats < seats.length && index < seats.length)
 		{
 			seats[index] = groupName;
+			numFilledSeats++;
 		}
 		else
 		{
-			throw new FullRowException("Row Filled!");
+			throw new FullRowException("FullRow/IndexOutOfBounds Exception on seatCustomer!");
 		}
 	}
 	
@@ -61,7 +71,7 @@ public class Row {
 	{
 		if (index >= seats.length)
 		{
-			throw new IndexOutOfBoundsException("IOBException on getGroup!");
+			throw new IndexOutOfBoundsException("IndexOutOfBoundsException on getGroup!");
 		}
 		else
 		{

@@ -93,10 +93,10 @@ public class QueueList<T> implements QueueInterface<T> {
 	@Override
 	public String toString()
 	{
-		String result = "List of size " + numItems + " contains:\n";
+		String result = "";
 		for (int i = 0; i < numItems; i++)
 		{
-			result += (items[(front + i) % items.length]) + " ";
+			result += "\t" + (i+1) + " - " + items[i].toString() + "\n";
 		}
 		return result;
 	}
