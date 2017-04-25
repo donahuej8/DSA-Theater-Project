@@ -115,7 +115,7 @@ public class Driver {
 		boolean gettingTicketPrice = true;
 		while (gettingTicketPrice)
 		{
-			System.out.println("\tEnter the price of a ticket: ");
+			System.out.print("\tEnter the price of a ticket: ");
 			double num3 = Double.parseDouble(stdin.readLine().trim());
 			if (num3 <= 0) //Invalid Input
 			{
@@ -416,7 +416,8 @@ public class Driver {
 				///////////////////////////////////////////////////////////
 				case "5":	// Display Seating Chart for Life
 					System.out.println("| - Display Seating Chart for \"Life\" - |");
-					//lifeTheater.displaySeatingChart() or something
+					System.out.println(lifeTheater.getSeatingChart());
+					System.out.println();
 					break;
 					
 				///////////////////////////////////////////////////////////
@@ -424,7 +425,8 @@ public class Driver {
 				///////////////////////////////////////////////////////////
 				case "6":	// Display Seating Chart for Logan
 					System.out.println("| - Display Seating Chart for \"Logan\" - |");
-					//loganTheater.displaySeatingChart() or something
+					System.out.println(loganTheater.getSeatingChart());
+					System.out.println();
 					break;
 				///////////////////////////////////////////////////////////
 				// - - - - - - - - - - - Option 7. - - - - - - - - - - - //
