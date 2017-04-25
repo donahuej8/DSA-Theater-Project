@@ -19,8 +19,9 @@ public class Driver {
 		int lineCounter;		// number of current line (0 for reg1, 1 for reg2, 2 for express)
 		
 		// Fields for Sales
+		double ticketPrice = 0.0;	//cost of a single ticket
 		int numTicketsSold = 0;	// total number of tickets sold
-		double totalEarnings = 0;	// total income from tickets sales
+		double totalEarnings = 0.0;	// total income from tickets sales
 		
 		// Fields for Theaters
 		int numRowsLogan = 0;	// number of Rows in Logan Theater
@@ -111,6 +112,22 @@ public class Driver {
 		
 		Theater lifeTheater = new Theater(numRowsLife, numSeatsLife, "Life");
 		
+		boolean gettingTicketPrice = true;
+		while (gettingTicketPrice)
+		{
+			System.out.println("\tEnter the price of a ticket: ");
+			double num3 = Double.parseDouble(stdin.readLine().trim());
+			if (num3 <= 0) //Invalid Input
+			{
+				System.out.println("Invalid cost!\n"
+						+ "Must be Greater Than Zero.");
+			}
+			else	//valid input
+			{
+				ticketPrice = num3;
+				gettingTicketPrice = false;
+			}
+		}
 
 		System.out.println(); // space for visual appeal
 		
