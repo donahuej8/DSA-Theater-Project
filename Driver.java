@@ -16,24 +16,31 @@ public class Driver {
 		QueueList<Group> reg1 = new QueueList();
 		QueueList<Group> reg2 = new QueueList();
 		QueueList<Group> express = new QueueList();
+		int lineCounter;		// number of current line (0 for reg1, 1 for reg2, 2 for express)
 		
 		// Fields for Sales
 		int numTicketsSold = 0;	// total number of tickets sold
-		int totalEarnings = 0;	// total income from tickets sales
+		double totalEarnings = 0;	// total income from tickets sales
 		
 		// Fields for Theaters
-		int numRows = 0;	// number of Rows per Theater
-		int numSeats = 0;	// number of Seats per Row
+		int numRowsLogan = 0;	// number of Rows in Logan Theater
+		int numRowsLife = 0;	// number of Rows in Life Theater
+		int numSeatsLogan = 0;	// number of Seats per Row in Logan Theater
+		int numSeatsLife = 0;	// number of Seats per Row in Life Theater
 		
 		//////////////////////////////////////////////////////////////////
 		// - - - - - - - - Retrieve General Information - - - - - - - - //
 		//////////////////////////////////////////////////////////////////
 		
-		// - - - - - - - - Number of Rows - - - - - - - - //
-		boolean gettingRows = true;
+		
+		System.out.println("Welcome to the Wonderful Movie Theater program!\n\tTonight's features are:\n\t\t\"Life\" and \"Logan\"");
+		System.out.println("\nPlease specify the size of the movie theaters:");
+		// - - - - - - - - Logan - - - - - - - - //
+		System.out.println("\tEnter information about the Logan Movie Theater:");	
+		boolean gettingRows= true;
 		while (gettingRows)
 		{
-			System.out.print("How many rows will be in each theater? ");
+			System.out.print("\t\tEnter number of rows: ");
 			int num1 = Integer.parseInt(stdin.readLine().trim());
 			if (num1 <= 0) // invalid input
 			{
@@ -42,16 +49,15 @@ public class Driver {
 			}
 			else // valid input
 			{
-				numRows = num1;
+				numRowsLogan = num1;
 				gettingRows = false;
 			}
 		}
 		
-		// - - - - - - - - Number of Seats per Row - - - - - - - - //		
 		boolean gettingSeats = true;
 		while (gettingSeats)
 		{
-			System.out.print("How many seats will be in each row? ");
+			System.out.print("\t\tEnter number of seats: ");
 			int num2 = Integer.parseInt(stdin.readLine().trim());
 			if (num2 <= 0) // invalid input
 			{
@@ -60,19 +66,52 @@ public class Driver {
 			}
 			else // valid input
 			{
-				numSeats = num2;
+				numSeatsLogan = num2;
 				gettingSeats = false;
 			}
 		}
 		
-		// Create Two Theater Objects (Logan and Life)
-		Theater lifeTheater = new Theater(numRows, numSeats, "Life");
-		Theater loganTheater = new Theater(numRows, numSeats, "Logan");
-		// Notify User of Successful Theater Creation
-		System.out.println(); // space for visual appeal
-		System.out.println("Theaters Successfully Created.");
-		System.out.println("Rows per Theater: " + numRows);
-		System.out.println("Seats per Row: " + numSeats);
+		Theater loganTheater = new Theater(numRowsLogan, numSeatsLogan, "Logan");
+		
+		// - - - - - - - - Life - - - - - - - - //
+		System.out.println("\tEnter information about the Life Movie Theater:");
+		boolean gettingRows2= true;
+		while (gettingRows2)
+		{
+			System.out.print("\t\tEnter number of rows: ");
+			int num1 = Integer.parseInt(stdin.readLine().trim());
+			if (num1 <= 0) // invalid input
+			{
+				System.out.println("Invalid Number of Rows!\n"
+						+ "Must be Greater Than Zero.");
+			}
+			else // valid input
+			{
+				numRowsLife = num1;
+				gettingRows2 = false;
+			}
+		}
+		
+		boolean gettingSeats2 = true;
+		while (gettingSeats2)
+		{
+			System.out.print("\t\tEnter number of seats: ");
+			int num2 = Integer.parseInt(stdin.readLine().trim());
+			if (num2 <= 0) // invalid input
+			{
+				System.out.println("Invalid Number of Seats!\n"
+						+ "Must be Greater Than Zero.");
+			}
+			else // valid input
+			{
+				numSeatsLife = num2;
+				gettingSeats2 = false;
+			}
+		}
+		
+		Theater lifeTheater = new Theater(numRowsLife, numSeatsLife, "Life");
+		
+
 		System.out.println(); // space for visual appeal
 		
 		////////////////////////////////////////////////////////////////
@@ -142,7 +181,7 @@ public class Driver {
 						System.out.println(partySize);
 						if (partySize < 1)
 						{
-							System.out.println("Hmm... Seems like your party is a bit small.");
+							System.out.println("Hmm... Seems like your party is un-naturally small.");
 							System.out.println("Please try again.");
 						}
 						else
@@ -252,12 +291,43 @@ public class Driver {
 					//If it's the first time using this function,
 					if (firstLoop) {
 						//- ask what line goes first
+						boolean gettingLineInfo = true;
+						while (gettingLineInfo) {
+							System.out.println("Select your movie preference: ");
+							System.out.println("\t1.) Regular Line 1");
+							System.out.println("\t2.) Regular Line 2");
+							System.out.println("\t3.) Express Line");
+							System.out.print("Make your selection now: ");
+							String lineSelection = stdin.readLine().trim();
+							System.out.println(lineSelection);
+							switch (lineSelection)
+							{
+								case "1":
+									lineCounter = 0;
+									gettingLineInfo = false;
+									break;
+								case "2":
+									lineCounter = 1;
+									gettingLineInfo = false;
+									break;
+								case "3":
+									lineCounter = 2;
+									gettingLineInfo = false;
+									break;
+								default:
+									System.out.println("Improper Input!");
+									System.out.println("Please try again.");
+									break;
+							}
+							
+						}
 						firstLoop = false; // after first time, don't allow this
 					}
 					
 					//For each line
-					 		//- ask what movie the first group wants to see
+					 		//- ask what movie the first group wants to see - taken care of by group when they enter theater
 					 		//- check for room in that Theater
+							
 					 		//- if not enough room, give alternatives
 					 		//- else, seat the group in the theater
 					 		//- after actions are carried out, remove from ticket line
@@ -346,18 +416,22 @@ public class Driver {
 					System.out.println("| - Display Tickets Sold and Total Earnings - |");
 					
 					System.out.println("Tickets Sold: \t" + numTicketsSold);
-					System.out.println("Total Earnings: \t" + totalEarnings);
+					System.out.println("Total Earnings: \t$" + totalEarnings);
 					break;
 					
 				///////////////////////////////////////////////////////////
 				// - - - - - - - - - - - Option 8. - - - - - - - - - - - //
 				///////////////////////////////////////////////////////////
 				case "8":	// End Program
-					// Clear Both Theaters //Note: you can just call System.exit or have the program just end without clearing anything
+					// Clear Both Theaters
 					lifeTheater.clearTheater();
 					loganTheater.clearTheater();
+					reg1.dequeueAll();
+					reg2.dequeueAll();
+					express.dequeueAll();
+					System.out.println("The Wonderful Movie Theater who earned $" + totalEarnings + " kicks out remaining customers and closes...");
+					System.out.println("Good Bye!");
 					reading = false; // Stop "reading" input
-					System.out.println("| - - - Program Ended - - - |");
 					break;
 					
 				///////////////////////////////////////////////////////////
