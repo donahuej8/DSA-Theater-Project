@@ -434,8 +434,9 @@ public class Driver {
 				case "7":	// Display Tickets Sold and Earnings
 					System.out.println("| - Display Tickets Sold and Total Earnings - |");
 					
-					System.out.println("Tickets Sold: \t" + numTicketsSold);
-					System.out.println("Total Earnings: \t$" + totalEarnings);
+					System.out.println("\tTickets Sold: " + numTicketsSold);
+					System.out.println("\tTotal Earnings: $" + totalEarnings);
+					System.out.println();
 					break;
 					
 				///////////////////////////////////////////////////////////
