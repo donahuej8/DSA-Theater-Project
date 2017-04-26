@@ -78,4 +78,20 @@ public class Row {
 			return seats[index];
 		}
 	}
+	
+	/**
+	 * Remove the person from the given seat
+	 * @param index - seat number in the Row
+	 */
+	public void clearSeat(int index) 
+	{
+		if (index < seats.length) 
+		{
+			seats[index] = null;
+		} 
+		else 
+		{
+			throw new IndexOutOfBoundsException("IndexOutOfBoundsException on clearSeat!");
+		}
+	}
 }

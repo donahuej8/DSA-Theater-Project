@@ -310,7 +310,7 @@ public class Driver {
 						//- ask what line goes first
 						boolean gettingLineInfo = true;
 						while (gettingLineInfo) {
-							System.out.println("Select your movie preference: ");
+							System.out.println("Select your line preference: ");
 							System.out.println("\t1.) Regular Line 1");
 							System.out.println("\t2.) Regular Line 2");
 							System.out.println("\t3.) Express Line");

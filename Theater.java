@@ -72,7 +72,7 @@ public class Theater {
 	 */
 	public boolean hasRoom(Group group)
 	{
-		return (numInTheater + group.getGroupNum() >= MAX_NUM_CUSTOMERS);
+		return (numInTheater + group.getGroupNum() <= MAX_NUM_CUSTOMERS);
 	}
 	
 	/**
@@ -99,29 +99,29 @@ public class Theater {
 		// else if the theater cannot hold enough customers, throw an exception
 		// else, find first available row, first available seat, seat first customer
 		// 	then do the same for the next customer and so on until there are none
-		if (numInTheater + group.getGroupNum() >= MAX_NUM_CUSTOMERS)//not enough room
+		if (!(hasRoom(group)))//not enough room
 		{
 			throw new FullTheaterException("FullTheaterException on seatGroup!");
 		}
 		else // there is enough room for the group
 		{
 			int groupNum = group.getGroupNum();
-			int firstRowIndex = 0;
-			int firstSeatIndex = 0;
+			int rowIndex = 0;
+			int seatIndex = 0;
 			for (int i = 1; i <= groupNum; i++) // for each customer
 			{
 				// while the current row is full
-				while (rows[firstRowIndex].isFull())
+				while (rows[rowIndex].isFull())
 				{
-					firstRowIndex++; // move on to next row until non-full is reached
+					rowIndex++; // move on to next row until non-full is reached
 				}
 				// while the current seat is filled
-				while (rows[firstRowIndex].getGroup(firstSeatIndex) != null)
+				while (rows[rowIndex].getGroup(seatIndex) != null)
 				{
-					firstSeatIndex++; // move on to next seat until non-null is reached
+					seatIndex++; // move on to next seat until non-null is reached
 				}
 				// fill seat
-				rows[firstRowIndex].seatCustomer(group, firstSeatIndex);
+				rows[rowIndex].seatCustomer(group, seatIndex);
 			}
 			numInTheater += groupNum; // add to number of customers in theater
 		}
@@ -139,9 +139,50 @@ public class Theater {
 		 * theater with that name. Once found, take the groupNumber from them.
 		 * This will determine how many total customers we need to find 
 		 * with that name!
+		*/
+		boolean found = false;
+		int i = 0;
+		int numberGuestInGroup = 0;
+		while (i < numRows && found == false)
+		{
+			if (rows[i].isEmpty() == false) // if the row isn't empty
+			{
+				int j = 0;
+				while (j < numSeatsPerRow && found == false) // check each seat
+				{
+					if (rows[i].getGroup(j).getGroupName().equals(groupName)) // if match
+					{
+						found = true; // they have been found in the theater
+						numberGuestInGroup = rows[i].getGroup(j).getGroupNum();
+					}
+				}
+			} // else if isEmpty(), move on to next row
+			i++;
+		}
+		/*
 		 * This way, we reduce the number of searches done and don't end up
 		 * with unnecessary searches after all group members have been found.
 		 */
+		int counter = 0;
+		int x = 0;
+		while (counter < numberGuestInGroup) 
+		{
+			while (x < numRows && counter < numberGuestInGroup)
+			{
+				if (rows[x].isEmpty() == false)		//if the row isn't empty
+				{
+					int y = 0;
+					while (y < numSeatsPerRow && counter < numberGuestInGroup)
+					{
+						if (rows[x].getGroup(y).getGroupName().equals(groupName))	//if match
+						{
+							rows[x].clearSeat(y);
+							counter++;
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	public boolean inTheater(String name)
