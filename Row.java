@@ -7,7 +7,7 @@ public class Row {
 	
 	/**
 	 * Constructor for the Row class
-	 * @param numSeats
+	 * @param numSeats - the number of seats to put in the row (in Group[] seats)
 	 */
 	public Row(int numSeats)
 	{
@@ -17,7 +17,7 @@ public class Row {
 	
 	/**
 	 * Whether or not the row is full
-	 * @return
+	 * @return true if row is full, false if it isnt
 	 */
 	public boolean isFull()
 	{
@@ -26,7 +26,7 @@ public class Row {
 	
 	/**
 	 * Whether or not the row is empty
-	 * @return
+	 * @return if the numFilledSeats = 0
 	 */
 	public boolean isEmpty()
 	{
@@ -35,7 +35,7 @@ public class Row {
 	
 	/**
 	 * Give the number of filled seats in the row
-	 * @return
+	 * @return numFilledSeats - the number of seats taken in the row
 	 */
 	public int getNumFilledSeats()
 	{
@@ -44,9 +44,9 @@ public class Row {
 	
 	/**
 	 * Put the given customer (actually a Group) in the given index
-	 * @param groupName
-	 * @param index
-	 * @throws FullRowException
+	 * @param groupName - Group to sit down
+	 * @param index - place in row to sit the member of the group
+	 * @throws FullRowException - if numFilledSeats goes above the length of the row or index is out of bounds.
 	 */
 	public void seatCustomer(Group groupName, int index) throws FullRowException
 	{
@@ -63,9 +63,9 @@ public class Row {
 	
 	/**
 	 * Give the Group object in the given index
-	 * @param index
-	 * @return
-	 * @throws IndexOutOfBoundsException
+	 * @param index - the place im the row to check for the group
+	 * @return the Group at that seat in the row
+	 * @throws IndexOutOfBoundsException - if the index is not in the bounds of the row
 	 */
 	public Group getGroup(int index) throws IndexOutOfBoundsException
 	{
@@ -81,13 +81,14 @@ public class Row {
 	
 	/**
 	 * Remove the person from the given seat
-	 * @param index - seat number in the Row
+	 * @param index - seat number in the Row to clear from
 	 */
 	public void clearSeat(int index) 
 	{
 		if (index < seats.length) 
 		{
 			seats[index] = null;
+			numFilledSeats--;
 		} 
 		else 
 		{

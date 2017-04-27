@@ -19,8 +19,9 @@ public class Theater {
 	
 	/**
 	 * Constructor for Theater Class
-	 * @param numRows
-	 * @param numSeatsPerRow
+	 * @param numRows - the number of rows to have in the theater 
+	 * @param numSeatsPerRow - the number of seats per row in the theater
+	 * @param movieName - the name of the movie being screened in this cinema
 	 */
 	public Theater(int numRows, int numSeatsPerRow, String movieName)
 	{
@@ -40,7 +41,7 @@ public class Theater {
 	
 	/**
 	 * Give the name of the movie in this theater
-	 * @return movieName
+	 * @return movieName - the name of the movie in this theater
 	 */
 	public String getMovieName()
 	{
@@ -49,7 +50,7 @@ public class Theater {
 	
 	/**
 	 * Give the number of Rows in this Theater
-	 * @return numRows
+	 * @return numRows - the number of rows in this theater.
 	 */
 	public int getNumRows()
 	{
@@ -58,7 +59,7 @@ public class Theater {
 	
 	/**
 	 * Give the number of customers currently in this Theater
-	 * @return numInTheater
+	 * @return numInTheater - number of customers currently in theater
 	 */
 	public int getNumInTheater()
 	{
@@ -67,8 +68,8 @@ public class Theater {
 	
 	/**
 	 * Whether or not the Theater has enough room for a given group
-	 * @param group
-	 * @return
+	 * @param group - The group to check if they can fit in the theater
+	 * @return true if there is room, false if not
 	 */
 	public boolean hasRoom(Group group)
 	{
@@ -85,13 +86,14 @@ public class Theater {
 		{
 			rows[i] = new Row(numSeatsPerRow);
 		}
+		numInTheater = 0;
 	}
 	
 	/**
 	 * Seat all customers in a Group into their own seats
-	 * @param group
-	 * @throws FullTheaterException
-	 * @throws FullRowException
+	 * @param group - Group to seat
+	 * @throws FullTheaterException - if the theater cannot hold this group
+	 * @throws FullRowException - not thrown
 	 */
 	public void seatGroup(Group group) throws FullTheaterException, FullRowException
 	{
@@ -129,7 +131,7 @@ public class Theater {
 	
 	/**
 	 * Remove all members with the given Group name from the Theater
-	 * @param groupName
+	 * @param groupName - name of group to find and remove
 	 */
 	public void removeGroup(String groupName)
 	{
@@ -178,6 +180,7 @@ public class Theater {
 						{
 							rows[x].clearSeat(y);
 							counter++;
+							numInTheater--;
 						}
 					}
 				}
@@ -185,6 +188,11 @@ public class Theater {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param name - name of group in theater
+	 * @return true if that name is the name of group of anyone seated in the theater, false otherwise
+	 */
 	public boolean inTheater(String name)
 	{
 		boolean found = false;
@@ -209,7 +217,7 @@ public class Theater {
 	
 	/**
 	 * Create and return a seating chart to represent the Theater layout
-	 * @return layout
+	 * @return layout - a beautiful seating chart, ty based Jack
 	 */
 	public String getSeatingChart()
 	{
