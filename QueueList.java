@@ -8,6 +8,9 @@ public class QueueList<T> implements QueueInterface<T> {
 	protected int numItems;
 	
 	@SuppressWarnings("unchecked")
+	/**
+	 * Constructor: creates the array, keeps track of front and back, and numItems
+	 */
 	public QueueList()
 	{
 		items = (T[]) new Object[3];
@@ -16,12 +19,19 @@ public class QueueList<T> implements QueueInterface<T> {
 		numItems = 0;
 	} // end of Constructor
 	
+	
 	@Override
+	/**
+	 * isEmpty: returns true if the queue is empty, false if not
+	 */
 	public boolean isEmpty() {
 		return (numItems == 0);
 	}
 
 	@Override
+	/**
+	 * @param newItem - item to enqueue into queue
+	 */
 	public void enqueue(T newItem) throws QueueException {
 		if (numItems == items.length) // list is full
 		{
@@ -35,6 +45,9 @@ public class QueueList<T> implements QueueInterface<T> {
 	} // end of enqueue
 	
 	@SuppressWarnings("unchecked")
+	/**
+	 * resize: resizes array to double the size and copys over items
+	 */
 	protected void resize()
 	{
 		//Make temporary list that is twice the size of the current list
@@ -52,6 +65,10 @@ public class QueueList<T> implements QueueInterface<T> {
 	} // end of resize
 
 	@Override
+	/**
+	 * dequeue: removes item from front and resets index of front element
+	 * @return ref - object being removed from the line
+	 */
 	public T dequeue() throws QueueException {
 		T ref;
 		if (numItems != 0)
@@ -71,6 +88,9 @@ public class QueueList<T> implements QueueInterface<T> {
 
 	@SuppressWarnings("unchecked")
 	@Override
+	/**
+	 * dequeueAll: removes everything from the line
+	 */
 	public void dequeueAll() {
 		items = (T[]) new Object[3];
 		front = back = numItems = 0;
@@ -78,6 +98,10 @@ public class QueueList<T> implements QueueInterface<T> {
 	} // end of dequeueAll
 
 	@Override
+	/**
+	 * peek: returns the front object without removing it
+	 * @return t - item at front of array
+	 */
 	public T peek() throws QueueException {
 		if (numItems != 0)
 		{
@@ -91,12 +115,16 @@ public class QueueList<T> implements QueueInterface<T> {
 	} // end of peek
 	
 	@Override
+	/**
+	 * toString: returns String representation of queue
+	 * @return result - string form of queue
+	 */
 	public String toString()
 	{
 		String result = "";
 		for (int i = 0; i < numItems; i++)
 		{
-			result += "\t" + (i+1) + " - " + items[i].toString() + "\n";
+			result += "\t" + (i+1) + " - " + items[(front+i)%items.length].toString() + "\n";
 		}
 		return result;
 	}
