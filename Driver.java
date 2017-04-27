@@ -7,7 +7,7 @@ public class Driver {
 	private static BufferedReader stdin = 
 			new BufferedReader(new InputStreamReader(System.in));
 	
-	public static void main(String [] args) throws IOException
+	public static void main(String [] args) throws IOException, QueueException, FullTheaterException
 	{
 		// Fields for Ticket Lines
 		int numLine1 = 0;		// number of customers in reg1
@@ -16,11 +16,12 @@ public class Driver {
 		QueueList<Group> reg1 = new QueueList();
 		QueueList<Group> reg2 = new QueueList();
 		QueueList<Group> express = new QueueList();
-		int lineCounter;		// number of current line (0 for reg1, 1 for reg2, 2 for express)
+		int lineCounter = 0;	// number of current line (0 for reg1, 1 for reg2, 2 for express)
 		
 		// Fields for Sales
 		double ticketPrice = 0.0;	//cost of a single ticket
-		int numTicketsSold = 0;	// total number of tickets sold
+		int numTicketsSoldLogan = 0;// total number of tickets sold for Logan
+		int numTicketsSoldLife = 0;	// total number of tickets sold for Life
 		double totalEarnings = 0.0;	// total income from tickets sales
 		
 		// Fields for Theaters
@@ -311,43 +312,151 @@ public class Driver {
 						boolean gettingLineInfo = true;
 						while (gettingLineInfo) {
 							System.out.println("Select your line preference: ");
-							System.out.println("\t1.) Regular Line 1");
-							System.out.println("\t2.) Regular Line 2");
-							System.out.println("\t3.) Express Line");
+							System.out.println("\tReg1");
+							System.out.println("\tReg2");
+							System.out.println("\tExpress");
 							System.out.print("Make your selection now: ");
-							String lineSelection = stdin.readLine().trim();
+							String lineSelection = stdin.readLine().trim().toUpperCase();
 							System.out.println(lineSelection);
 							switch (lineSelection)
 							{
-								case "1":
+								case "REG1":
 									lineCounter = 0;
 									gettingLineInfo = false;
 									break;
-								case "2":
+								case "REG2":
 									lineCounter = 1;
 									gettingLineInfo = false;
 									break;
-								case "3":
+								case "EXPRESS":
 									lineCounter = 2;
 									gettingLineInfo = false;
 									break;
 								default:
 									System.out.println("Improper Input!");
-									System.out.println("Please try again.");
+									System.out.println("Type: Reg1, Reg2, or Express");
 									break;
 							}
 							
 						}
 						firstLoop = false; // after first time, don't allow this
 					}
-					
-					//For each line
-					 		//- ask what movie the first group wants to see - taken care of by group when they enter theater
-					 		//- check for room in that Theater
-							
-					 		//- if not enough room, give alternatives
-					 		//- else, seat the group in the theater
-					 		//- after actions are carried out, remove from ticket line
+					// - - - - - - - - Check Lines - - - - - - - - //
+					if (reg1.isEmpty() && reg2.isEmpty() && express.isEmpty()) // both are empty
+					{
+						System.out.println("No customers are in the lines!");
+					}
+					else
+					{
+						for (int i = 0; i < 3; i++) // for each line...
+						{
+							QueueList<Group> lineToWorkWith;
+							switch (lineCounter)
+							{
+								case 0: // Reg1
+									lineToWorkWith = reg1;
+									break;
+								case 1: // Reg2
+									lineToWorkWith = reg2;
+									break;
+								case 2: // Express
+									lineToWorkWith = express;
+									break;
+							} // end of switch
+							if (lineToWorkWith.isEmpty())
+							{
+								System.out.println("No customers in this line!");
+							}
+							else // take care of first customer
+							{
+								String movieChoice = lineToWorkWith.peek().getMovieToSee();
+								if (loganTheater.hasRoom(lineToWorkWith.peek()) == false
+										&& lifeTheater.hasRoom(lineToWorkWith.peek()) == false)
+								{
+									System.out.println("Sorry, both movies are sold out!");
+								}
+								else
+								{
+									if (movieChoice.equals("Logan")) // if Logan
+									{
+										// check for room
+										if (loganTheater.hasRoom(lineToWorkWith.peek()))
+										{
+											loganTheater.seatGroup(lineToWorkWith.peek());
+											numTicketsSoldLogan += lineToWorkWith.peek().getGroupNum();
+											System.out.println(lineToWorkWith.peek().getGroupName() + " has entered"
+													+ " the Logan Theater.");
+										}
+										else
+										{
+											System.out.println("Sorry, this movie is sold out!");
+											if (lifeTheater.hasRoom(lineToWorkWith.peek()))
+											{
+												System.out.print("Would you like to see another movie? (Y/N): ");
+												String seeOtherMovie = stdin.readLine().trim().toUpperCase();
+												System.out.println(seeOtherMovie);
+												if (seeOtherMovie.equals("Y"))
+												{
+													lifeTheater.seatGroup(lineToWorkWith.peek()); // place in other theater
+													numTicketsSoldLife += lineToWorkWith.peek().getGroupNum();
+													totalEarnings += lineToWorkWith.peek().getGroupNum() * ticketPrice;
+													System.out.println(lineToWorkWith.peek().getGroupName() + " has entered"
+															+ " the Life Theater.");
+												}
+												else
+												{
+													System.out.println("Goodbye!");
+												}
+											}
+											else
+											{
+												System.out.println("Goodbye!");
+											}
+										}
+									}
+									else // if Life
+									{
+										// check for room
+										if (lifeTheater.hasRoom(lineToWorkWith.peek()))
+										{
+											lifeTheater.seatGroup(lineToWorkWith.peek());
+											numTicketsSoldLife += lineToWorkWith.peek().getGroupNum();
+											System.out.println(lineToWorkWith.peek().getGroupName() + " has entered"
+													+ " the Life Theater.");
+										}
+										else
+										{
+											System.out.println("Sorry, this movie is sold out!");
+											if (loganTheater.hasRoom(lineToWorkWith.peek()))
+											{
+												System.out.print("Would you like to see another movie? (Y/N): ");
+												String seeOtherMovie = stdin.readLine().trim().toUpperCase();
+												System.out.println(seeOtherMovie);
+												if (seeOtherMovie.equals("Y"))
+												{
+													loganTheater.seatGroup(lineToWorkWith.peek()); // place in other theater
+													numTicketsSoldLogan += lineToWorkWith.peek().getGroupNum();
+													totalEarnings += lineToWorkWith.peek().getGroupNum() * ticketPrice;
+													System.out.println(lineToWorkWith.peek().getGroupName() + " has entered"
+															+ " the Logan Theater.");
+												}
+												else
+												{
+													System.out.println("Goodbye!");
+												}
+											}
+											else
+											{
+												System.out.println("Goodbye!");
+											}
+										}
+									}
+								}
+								lineToWorkWith.dequeue(); // remove from line regardless
+							} // end of if (line is empty)
+							lineCounter = (lineCounter + 1) % 3; // increment circularly
+						} // end of for loop
+					}
 					break;
 					
 				///////////////////////////////////////////////////////////
@@ -355,13 +464,6 @@ public class Driver {
 				///////////////////////////////////////////////////////////
 				case "3":	// Customer(s) Leave(s) Theater
 					System.out.println("| - Customer(s) Leave(s) Theater - |");
-					/*
-					 * Ask which customer group is leaving
-					 * 		- Check both theaters for customers
-					 * 		- If not found, print error message
-					 * 		- else if found,
-					 * 			Remove these customers from the theater they are in
-					 */
 					// Ask which group is leaving
 					System.out.print("Which customer/group is leaving? (Enter Name)");
 					String nameLeaving = stdin.readLine().trim();
@@ -434,7 +536,8 @@ public class Driver {
 				case "7":	// Display Tickets Sold and Earnings
 					System.out.println("| - Display Tickets Sold and Total Earnings - |");
 					
-					System.out.println("\tTickets Sold: " + numTicketsSold);
+					System.out.println("\tTickets Sold for Logan: " + numTicketsSoldLogan);
+					System.out.println("\tTickets Sold for Life: " + numTicketsSoldLife);
 					System.out.println("\tTotal Earnings: $" + totalEarnings);
 					System.out.println();
 					break;
