@@ -7,6 +7,7 @@ public class Driver {
 	private static BufferedReader stdin = 
 			new BufferedReader(new InputStreamReader(System.in));
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void main(String [] args) throws IOException, QueueException, FullTheaterException
 	{
 		// Fields for Ticket Lines
@@ -143,7 +144,7 @@ public class Driver {
 			// Display Options
 			System.out.println("Choose From The Following:");
 			System.out.println("1.) Customer(s) enter(s) Movie Theater.");
-			System.out.println("2.) Customer buys tiket(s).");
+			System.out.println("2.) Customer buys ticket(s).");
 			System.out.println("3.) Customer(s) leave(s) the theater.");
 			System.out.println("4.) Display info about "
 					+ "customers waiting for tickets.");
@@ -178,7 +179,8 @@ public class Driver {
 						System.out.print("Enter customer name: ");
 						groupName = stdin.readLine().trim();
 						System.out.println(groupName);
-						if (loganTheater.inTheater(groupName))
+						if (loganTheater.inTheater(groupName)
+								|| lifeTheater.inTheater(groupName))
 						{
 							System.out.println("Sorry! That name is already in use.");
 							System.out.println("Please try again.");
@@ -240,7 +242,7 @@ public class Driver {
 					boolean gettingChildInfo = true;
 					while (gettingChildInfo)
 					{
-						System.out.print("Does your this party contain a child"
+						System.out.print("Does this party contain a child"
 								+ " 11 years of age or under? Y/N");
 						String checkAge = stdin.readLine().trim();
 						System.out.println(checkAge);
@@ -280,6 +282,10 @@ public class Driver {
 									+ partySize + " placed in Express Line.");
 							numLineExpress++;
 						}
+					}
+					else // no young child, must check regular lines
+					{
+						checkRegs = true;
 					}
 					if (checkRegs == true)
 					{
@@ -350,7 +356,7 @@ public class Driver {
 					{
 						for (int i = 0; i < 3; i++) // for each line...
 						{
-							QueueList<Group> lineToWorkWith;
+							QueueList<Group> lineToWorkWith = null;
 							switch (lineCounter)
 							{
 								case 0: // Reg1
@@ -384,6 +390,7 @@ public class Driver {
 										{
 											loganTheater.seatGroup(lineToWorkWith.peek());
 											numTicketsSoldLogan += lineToWorkWith.peek().getGroupNum();
+											totalEarnings += lineToWorkWith.peek().getGroupNum() * ticketPrice;
 											System.out.println(lineToWorkWith.peek().getGroupName() + " has entered"
 													+ " the Logan Theater.");
 										}
@@ -421,6 +428,7 @@ public class Driver {
 										{
 											lifeTheater.seatGroup(lineToWorkWith.peek());
 											numTicketsSoldLife += lineToWorkWith.peek().getGroupNum();
+											totalEarnings += lineToWorkWith.peek().getGroupNum() * ticketPrice;
 											System.out.println(lineToWorkWith.peek().getGroupName() + " has entered"
 													+ " the Life Theater.");
 										}

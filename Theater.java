@@ -19,9 +19,8 @@ public class Theater {
 	
 	/**
 	 * Constructor for Theater Class
-	 * @param numRows - the number of rows to have in the theater 
-	 * @param numSeatsPerRow - the number of seats per row in the theater
-	 * @param movieName - the name of the movie being screened in this cinema
+	 * @param numRows
+	 * @param numSeatsPerRow
 	 */
 	public Theater(int numRows, int numSeatsPerRow, String movieName)
 	{
@@ -41,7 +40,7 @@ public class Theater {
 	
 	/**
 	 * Give the name of the movie in this theater
-	 * @return movieName - the name of the movie in this theater
+	 * @return movieName
 	 */
 	public String getMovieName()
 	{
@@ -50,7 +49,7 @@ public class Theater {
 	
 	/**
 	 * Give the number of Rows in this Theater
-	 * @return numRows - the number of rows in this theater.
+	 * @return numRows
 	 */
 	public int getNumRows()
 	{
@@ -59,7 +58,7 @@ public class Theater {
 	
 	/**
 	 * Give the number of customers currently in this Theater
-	 * @return numInTheater - number of customers currently in theater
+	 * @return numInTheater
 	 */
 	public int getNumInTheater()
 	{
@@ -68,8 +67,8 @@ public class Theater {
 	
 	/**
 	 * Whether or not the Theater has enough room for a given group
-	 * @param group - The group to check if they can fit in the theater
-	 * @return true if there is room, false if not
+	 * @param group
+	 * @return
 	 */
 	public boolean hasRoom(Group group)
 	{
@@ -86,14 +85,13 @@ public class Theater {
 		{
 			rows[i] = new Row(numSeatsPerRow);
 		}
-		numInTheater = 0;
 	}
 	
 	/**
 	 * Seat all customers in a Group into their own seats
-	 * @param group - Group to seat
-	 * @throws FullTheaterException - if the theater cannot hold this group
-	 * @throws FullRowException - not thrown
+	 * @param group
+	 * @throws FullTheaterException
+	 * @throws FullRowException
 	 */
 	public void seatGroup(Group group) throws FullTheaterException, FullRowException
 	{
@@ -112,18 +110,27 @@ public class Theater {
 			int seatIndex = 0;
 			for (int i = 1; i <= groupNum; i++) // for each customer
 			{
-				// while the current row is full
-				while (rows[rowIndex].isFull())
+				// while the current row is full and valid
+				while (rowIndex < numRows && rows[rowIndex].isFull())
 				{
 					rowIndex++; // move on to next row until non-full is reached
+					seatIndex = 0;
 				}
-				// while the current seat is filled
-				while (rows[rowIndex].getGroup(seatIndex) != null)
+				if (rowIndex < numRows) // if valid row index
 				{
-					seatIndex++; // move on to next seat until non-null is reached
+					// while the current seat is filled and the seatIndex is valid
+					while (seatIndex < numSeatsPerRow && 
+							(rows[rowIndex].getGroup(seatIndex) != null))
+					{
+						seatIndex++; // move on to next seat until non-full is reached
+					}
+					// fill seat
+					rows[rowIndex].seatCustomer(group, seatIndex);
+					//if (seatIndex == numSeatsPerRow)
+					//{
+					//	seatIndex = 0; // reset index
+					//}
 				}
-				// fill seat
-				rows[rowIndex].seatCustomer(group, seatIndex);
 			}
 			numInTheater += groupNum; // add to number of customers in theater
 		}
@@ -131,7 +138,7 @@ public class Theater {
 	
 	/**
 	 * Remove all members with the given Group name from the Theater
-	 * @param groupName - name of group to find and remove
+	 * @param groupName
 	 */
 	public void removeGroup(String groupName)
 	{
@@ -152,15 +159,20 @@ public class Theater {
 				int j = 0;
 				while (j < numSeatsPerRow && found == false) // check each seat
 				{
-					if (rows[i].getGroup(j).getGroupName().equals(groupName)) // if match
+					if (rows[i].getGroup(j) != null)
 					{
-						found = true; // they have been found in the theater
-						numberGuestInGroup = rows[i].getGroup(j).getGroupNum();
+						if (rows[i].getGroup(j).getGroupName().equals(groupName)) // if match
+						{
+							found = true; // they have been found in the theater
+							numberGuestInGroup = rows[i].getGroup(j).getGroupNum();
+						}
 					}
+					j++;
 				}
 			} // else if isEmpty(), move on to next row
 			i++;
 		}
+		System.out.println("remove: " + numberGuestInGroup);
 		/*
 		 * This way, we reduce the number of searches done and don't end up
 		 * with unnecessary searches after all group members have been found.
@@ -176,23 +188,24 @@ public class Theater {
 					int y = 0;
 					while (y < numSeatsPerRow && counter < numberGuestInGroup)
 					{
-						if (rows[x].getGroup(y).getGroupName().equals(groupName))	//if match
+						if (rows[x].getGroup(y) != null) // not empty seat
 						{
-							rows[x].clearSeat(y);
-							counter++;
-							numInTheater--;
+							if (rows[x].getGroup(y).getGroupName().equals(groupName))	//if match
+							{
+								System.out.println(groupName + " left. Goodbye!");
+								rows[x].clearSeat(y);
+								counter++;
+								numInTheater--;
+							}
 						}
+						y++;
 					}
 				}
+				x++;
 			}
 		}
 	}
 	
-	/**
-	 * 
-	 * @param name - name of group in theater
-	 * @return true if that name is the name of group of anyone seated in the theater, false otherwise
-	 */
 	public boolean inTheater(String name)
 	{
 		boolean found = false;
@@ -204,10 +217,14 @@ public class Theater {
 				int j = 0;
 				while (j < numSeatsPerRow && found == false) // check each seat
 				{
-					if (rows[i].getGroup(j).getGroupName().equals(name)) // if match
+					if (rows[i].getGroup(j) != null) // not empty seat
 					{
-						found = true; // they have been found in the theater
+						if (rows[i].getGroup(j).getGroupName().equals(name)) // if match
+						{
+							found = true; // they have been found in the theater
+						}
 					}
+					j++;
 				}
 			} // else if isEmpty(), move on to next row
 			i++;
@@ -217,7 +234,7 @@ public class Theater {
 	
 	/**
 	 * Create and return a seating chart to represent the Theater layout
-	 * @return layout - a beautiful seating chart, ty based Jack
+	 * @return layout
 	 */
 	public String getSeatingChart()
 	{
